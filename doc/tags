@@ -1,8 +1,0 @@
-autochdir	vim-cdroot.txt	/*autochdir*
-cdroot	vim-cdroot.txt	/*cdroot*
-vim-cdroot	vim-cdroot.txt	/*vim-cdroot*
-vim-cdroot-commands	vim-cdroot.txt	/*vim-cdroot-commands*
-vim-cdroot-examples	vim-cdroot.txt	/*vim-cdroot-examples*
-vim-cdroot-introduction	vim-cdroot.txt	/*vim-cdroot-introduction*
-vim-cdroot-options	vim-cdroot.txt	/*vim-cdroot-options*
-vim-cdroot.txt	vim-cdroot.txt	/*vim-cdroot.txt*
