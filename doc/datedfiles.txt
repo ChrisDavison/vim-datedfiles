@@ -1,0 +1,46 @@
+*datedfiles.txt* create or jump to files with todays date.
+
+Useful for things like journals or logbooks, where you want to create a name
+with a format something like `~/journal/20200101-Monday.txt`.
+
+========================================================================
+
+CONTENTS                                              *DatedFilesContents*
+
+    1. Usage ...................... |DatedFilesUsage|
+    2. Examples ................... |DatedFilesExamples|
+
+========================================================================
+
+SECTION 1. USAGE                                         *DatedFilesUsage*
+
+
+`:DatedFile <root>`                                              *DatedFile*
+Creates a new markdown file using `strftime` format `%Y%m%d-%A.md`
+
+
+`:DatedFileWithFmt <root> <fmt>`                           *DatedFileWithFmt*
+Creates a new markdown file using `strftime` format `<fmt>.md`
+
+
+Both commands, when called, will:
+
+- Create the file, if it doesn't exist, and add a markdown atx-style header
+- Place cursor on the last line
+
+------------------------------------------------------------------------
+
+SECTION 2. EXAMPLES                                   *DatedFilesExamples*
+
+Logbook, like `~/notes/logbook/20200101-Friday.md`
+
+`:DatedFile ~/notes/logbook`
+
+
+Calendar, like `~/notes/calendar/2020-01 January.md`
+
+`:DatedFileWithFmt ~/notes/calendar %Y-%m %B`
+
+========================================================================
+
+vim:tw=78:ts=8:ft=help:norl:
