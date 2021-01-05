@@ -8,7 +8,8 @@ with a format something like `~/journal/20200101-Monday.txt`.
 CONTENTS                                              *DatedFilesContents*
 
     1. Usage ...................... |DatedFilesUsage|
-    2. Examples ................... |DatedFilesExamples|
+    2. Configuration .............. |DatedFilesConfiguration|
+    3. Examples ................... |DatedFilesExamples|
 
 ========================================================================
 
@@ -30,7 +31,17 @@ Both commands, when called, will:
 
 ------------------------------------------------------------------------
 
-SECTION 2. EXAMPLES                                   *DatedFilesExamples*
+SECTION 2. CONFIGURATION                         *DatedFilesConfiguration*
+
+`g:datedfile_default_format` [default: '%Y%m%d-%A']
+`strftime` format to use in the filename (will have `.md` appended)
+
+`g:datedfile_default_header_format`
+`strftime` format to use in the header (will have `# ` prepended)
+
+------------------------------------------------------------------------
+
+SECTION 3. EXAMPLES                                   *DatedFilesExamples*
 
 Logbook, like `~/notes/logbook/20200101-Friday.md`
 
