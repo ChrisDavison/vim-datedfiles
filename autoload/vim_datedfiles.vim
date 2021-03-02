@@ -13,7 +13,7 @@ function! vim_datedfiles#new_with_fmt(root, fmt, ...)
         let filename=expand('%:t:r')
         let words=split(l:filename, '\W\+')
         let titled=map(l:words, {_, word -> toupper(word[0]) . word[1:]})
-        call append(0, "# " . join(l:titled, ' '))
+        " call append(0, "# " . join(l:titled, ' '))
     endif
     exec "norm G"
 endfunction
