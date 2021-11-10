@@ -38,7 +38,7 @@ function! vim_datedfiles#new_with_fmt_and_name(root, fmt, name) abort
     if filereadable(l:filename)
         exec "edit " . l:filename
     else
-        let folder=fnamemodify(a:filename, ":p:h")
+        let folder=fnamemodify(l:filename, ":p:h")
         if !isdirectory(l:folder)
             call mkdir(l:folder, "p")
         endif
