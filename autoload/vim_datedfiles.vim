@@ -29,6 +29,7 @@ endfunction
 function! vim_datedfiles#new_with_fmt_and_name(root, fmt, name) abort
     let tag=get(a:, 1, "")
     let time=strftime(printf("%s", a:fmt))
+    let time_filename_portion=strftime(printf("%s", split(a:fmt, "/")[-1]))
     let timefmtheader="%Y-%m-%d %A"
     if exists('g:datedfile_default_header_format')
         let timefmtheader=g:datedfile_default_header_format
@@ -46,18 +47,22 @@ function! vim_datedfiles#new_with_fmt_and_name(root, fmt, name) abort
             let suppress=g:markdown_filename_as_header_suppress
             let g:markdown_filename_as_header_suppress=1
             exec "edit " . l:filename
-            call append(0, "# " . strftime(timefmtheader))
+            call append(0, "# " . <sid>titlecase(a:name))
+            call append(1, ["", "Timestamp: " . l:time_filename_portion])
             let g:markdown_filename_as_header_suppress=l:suppress
         else
             let filename=expand('%:t:r')
-            let words=split(l:filename, '\W\+')
-            let titled=map(l:words, {_, word -> toupper(word[0]) . word[1:]})
             exec "edit " . l:filename
-            call append(0, "# " . join(l:titled, ' '))
+            call append(0, "# " . <sid>titlecase(l:filename))
         endif
     endif
     exec "norm G"
+endfunction
 
+function! s:titlecase(sentence) abort
+    let words=split(a:sentence, '\W\+')
+    let titled=map(l:words, {_, word -> toupper(word[0]) . word[1:]})
+    return join(l:titled, ' ')
 endfunction
 
 function! vim_datedfiles#new_or_jump(root) abort
