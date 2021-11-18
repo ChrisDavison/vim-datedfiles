@@ -35,7 +35,11 @@ function! vim_datedfiles#new_with_fmt_and_name(root, fmt, name) abort
         let timefmtheader=g:datedfile_default_header_format
     endif
     let name=substitute(a:name, " ", "-", "g")
-    let filename=expand(a:root . "/" . l:time . "-" . l:name . ".md")
+    let root=a:root
+    if match(a:root, "/$")
+        let root=a:root[:-2]
+    end
+    let filename=expand(l:root . "/" . l:time . "-" . l:name . ".md")
     if filereadable(l:filename)
         exec "edit " . l:filename
     else
