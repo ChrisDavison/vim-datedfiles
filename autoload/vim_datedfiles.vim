@@ -1,11 +1,15 @@
-function! vim_datedfiles#new_with_fmt(root, fmt, ...) abort
-    let tag=get(a:, 1, "")
+function! s:filename(root, fmt, name) abort
     let time=strftime(printf("%s", a:fmt))
-    let timefmtheader="%Y-%m-%d %A"
-    if exists('g:datedfile_default_header_format')
-        let timefmtheader=g:datedfile_default_header_format
+        let name=""
+    if a:name != ""
+        let name="-" . substitute(a:name, " ", "-", "g")
     endif
-    let filename=expand(a:root . "/" . l:time . ".md")
+    let filename=expand(a:root . "/" . l:time . l:name . ".md")
+    return substitute(l:filename, "//", "/", "g")
+endfunction
+
+function! vim_datedfiles#new_with_fmt(root, fmt, ...) abort
+    let filename=s:filename(a:root, a:fmt, '')
     if filereadable(l:filename)
         exec "edit " . l:filename
     else
@@ -13,6 +17,11 @@ function! vim_datedfiles#new_with_fmt(root, fmt, ...) abort
             let suppress=g:markdown_filename_as_header_suppress
             let g:markdown_filename_as_header_suppress=1
             exec "edit " . l:filename
+            let timefmtheader="%Y-%m-%d %A"
+            if exists('g:datedfile_default_header_format')
+                let timefmtheader=g:datedfile_default_header_format
+            endif
+
             call append(0, "# " . strftime(timefmtheader))
             let g:markdown_filename_as_header_suppress=l:suppress
         else
@@ -27,19 +36,7 @@ function! vim_datedfiles#new_with_fmt(root, fmt, ...) abort
 endfunction
 
 function! vim_datedfiles#new_with_fmt_and_name(root, fmt, name) abort
-    let tag=get(a:, 1, "")
-    let time=strftime(printf("%s", a:fmt))
-    let time_filename_portion=strftime(printf("%s", split(a:fmt, "/")[-1]))
-    let timefmtheader="%Y-%m-%d %A"
-    if exists('g:datedfile_default_header_format')
-        let timefmtheader=g:datedfile_default_header_format
-    endif
-    let name=substitute(a:name, " ", "-", "g")
-    let root=a:root
-    if match(a:root, "/$")
-        let root=a:root[:-2]
-    end
-    let filename=expand(l:root . "/" . l:time . "-" . l:name . ".md")
+    let filename=s:filename(a:root, a:fmt, a:name)
     if filereadable(l:filename)
         exec "edit " . l:filename
     else
@@ -52,7 +49,7 @@ function! vim_datedfiles#new_with_fmt_and_name(root, fmt, name) abort
             let g:markdown_filename_as_header_suppress=1
             exec "edit " . l:filename
             call append(0, "# " . <sid>titlecase(a:name))
-            call append(1, ["", "Timestamp: " . l:time_filename_portion])
+            call append(1, ["", "Timestamp: " . strftime("%Y%m%dT%H%M")])
             let g:markdown_filename_as_header_suppress=l:suppress
         else
             let filename=expand('%:t:r')
