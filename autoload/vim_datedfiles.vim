@@ -1,4 +1,4 @@
-function! s:filename(root, fmt, name) abort
+function! s:filename(root, fmt, name) abort "{{{
     let time=strftime(printf("%s", a:fmt))
         let name=""
     if a:name != ""
@@ -6,9 +6,15 @@ function! s:filename(root, fmt, name) abort
     endif
     let filename=expand(a:root . "/" . l:time . l:name . ".md")
     return substitute(l:filename, "//", "/", "g")
-endfunction
+endfunction "}}}
 
-function! vim_datedfiles#new_with_fmt(root, fmt, ...) abort
+function! s:titlecase(sentence) abort "{{{
+    let words=split(a:sentence, '\W\+')
+    let titled=map(l:words, {_, word -> toupper(word[0]) . word[1:]})
+    return join(l:titled, ' ')
+endfunction "}}}
+
+function! vim_datedfiles#new_with_fmt(root, fmt, ...) abort "{{{
     let filename=s:filename(a:root, a:fmt, '')
     if filereadable(l:filename)
         exec "edit " . l:filename
@@ -33,9 +39,9 @@ function! vim_datedfiles#new_with_fmt(root, fmt, ...) abort
         endif
     endif
     exec "norm G"
-endfunction
+endfunction "}}}
 
-function! vim_datedfiles#new_with_fmt_and_name(root, fmt, name) abort
+function! vim_datedfiles#new_with_fmt_and_name(root, fmt, name) abort "{{{
     let filename=s:filename(a:root, a:fmt, a:name)
     if filereadable(l:filename)
         exec "edit " . l:filename
@@ -58,26 +64,16 @@ function! vim_datedfiles#new_with_fmt_and_name(root, fmt, name) abort
         endif
     endif
     exec "norm G"
-endfunction
+endfunction "}}}
 
-function! s:titlecase(sentence) abort
-    let words=split(a:sentence, '\W\+')
-    let titled=map(l:words, {_, word -> toupper(word[0]) . word[1:]})
-    return join(l:titled, ' ')
-endfunction
-
-function! vim_datedfiles#new_or_jump(root) abort
+function! vim_datedfiles#new_or_jump(root) abort "{{{
     let root=printf("%s", a:root)
-    let timefmt="%Y%m%d-%A"
-    if exists('g:datedfile_default_format')
-        let timefmt=g:datedfile_default_format
-    endif
-    call vim_datedfiles#new_with_fmt(l:root, l:timefmt)
-endfunction
+    call vim_datedfiles#new_with_fmt(l:root, g:datedfile_default_format)
+endfunction "}}}
 
-function! vim_datedfiles#new_or_jump_with_fmt(root, ...) abort
+function! vim_datedfiles#new_or_jump_with_fmt(root, ...) abort "{{{
     let root=printf("%s", a:root)
     let fmt=join(a:000, ' ')
     call vim_datedfiles#new_with_fmt(l:root, l:fmt)
-endfunction
+endfunction "}}}
 

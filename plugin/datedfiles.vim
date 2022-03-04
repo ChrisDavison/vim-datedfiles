@@ -2,9 +2,11 @@ if exists("g:loaded_vim_datedfiles")
     finish
 endif
 let g:loaded_vim_datedfiles = 1
+
 if !exists("g:datedfile_default_format")
     let g:datedfile_default_format="%Y-%m-%d-%A"
 endif
+
 if !exists("g:datedfile_default_header_format")
     let g:datedfile_default_header_format="%Y-%m-%d %A"
 endif
