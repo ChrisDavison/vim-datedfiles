@@ -4,8 +4,13 @@ function! s:filename(root, fmt, name) abort "{{{
     if a:name != ""
         let name="-" . substitute(a:name, " ", "-", "g")
     endif
-    let filename=expand(a:root . "/" . l:time . l:name . ".md")
-    return substitute(l:filename, "//", "/", "g")
+    let filename=l:time . l:name . ".md"
+    if g:datedfile_lowercase_filename
+        let filename=tolower(l:filename)
+    endif
+
+    let filepath=expand(a:root . "/" . l:filename)
+    return substitute(l:filepath, "//", "/", "g")
 endfunction "}}}
 
 function! s:titlecase(sentence) abort "{{{
@@ -19,30 +24,17 @@ function! vim_datedfiles#new_with_fmt(root, fmt, ...) abort "{{{
     if filereadable(l:filename)
         exec "edit " . l:filename
     else
-        if exists('g:markdown_filename_as_header_suppress')
-            let suppress=g:markdown_filename_as_header_suppress
-            let g:markdown_filename_as_header_suppress=1
-            exec "edit " . l:filename
-            let timefmtheader="%Y-%m-%d %A"
-            if exists('g:datedfile_default_header_format')
-                let timefmtheader=g:datedfile_default_header_format
-            endif
-
-            call append(0, "# " . strftime(timefmtheader))
-            let g:markdown_filename_as_header_suppress=l:suppress
-        else
-            let filename=expand('%:t:r')
-            let words=split(l:filename, '\W\+')
-            let titled=map(l:words, {_, word -> toupper(word[0]) . word[1:]})
-            exec "edit " . l:filename
-            call append(0, "# " . join(l:titled, ' '))
-        endif
+        " let words=split(fnamemodify(l:filename, ":t:r"), '\W\+')
+        " let titled=map(l:words, {_, word -> toupper(word[0]) . word[1:]})
+        exec "edit " . l:filename
+        call append(0, "# " . substitute(strftime(a:fmt), "--", " ", ""))
     endif
     exec "norm G"
 endfunction "}}}
 
 function! vim_datedfiles#new_with_fmt_and_name(root, fmt, name) abort "{{{
     let filename=s:filename(a:root, a:fmt, a:name)
+
     if filereadable(l:filename)
         exec "edit " . l:filename
     else
@@ -50,20 +42,15 @@ function! vim_datedfiles#new_with_fmt_and_name(root, fmt, name) abort "{{{
         if !isdirectory(l:folder)
             call mkdir(l:folder, "p")
         endif
-        if exists('g:markdown_filename_as_header_suppress')
-            let suppress=g:markdown_filename_as_header_suppress
-            let g:markdown_filename_as_header_suppress=1
-            exec "edit " . l:filename
-            call append(0, "# " . <sid>titlecase(a:name))
-            call append(1, ["", "Timestamp: " . strftime("%Y%m%dT%H%M")])
-            let g:markdown_filename_as_header_suppress=l:suppress
-        else
-            let filename=expand('%:t:r')
-            exec "edit " . l:filename
-            call append(0, "# " . <sid>titlecase(l:filename))
-        endif
+        echom l:filename
+        exec "edit " . l:filename
+        echom a:name
+        let header="# " . strftime(g:datedfile_default_header_format) . " " . <sid>titlecase(a:name)
+        call append(0, l:header)
     endif
-    exec "norm G"
+
+    " Finally, go to the end of the file and start writing
+    norm G
 endfunction "}}}
 
 function! vim_datedfiles#new_or_jump(root) abort "{{{
