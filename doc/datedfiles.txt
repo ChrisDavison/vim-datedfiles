@@ -5,52 +5,101 @@ with a format something like `~/journal/20200101-Monday.txt`.
 
 ========================================================================
 
-CONTENTS                                              *DatedFilesContents*
+CONTENTS                                             *DatedFiles-Contents*
 
-    1. Usage ...................... |DatedFilesUsage|
-    2. Configuration .............. |DatedFilesConfiguration|
-    3. Examples ................... |DatedFilesExamples|
+    1. Usage ...................... |DatedFiles-Usage|
+    2. Configuration .............. |DatedFiles-Configuration|
+    3. Examples ................... |DatedFiles-Examples|
 
 ========================================================================
 
-SECTION 1. USAGE                                         *DatedFilesUsage*
+SECTION 1. USAGE                                        *DatedFiles-Usage*
 
 
 `:DatedFile <root>`                                              *DatedFile*
-Creates a new markdown file using `strftime` format `%Y%m%d-%A.md`
+Creates a new markdown file using `strftime` format `%Y%m%d-%A.md`. If the file
+does not exist, it will be created. The cursor will be placed on the last
+line.
 
 
-`:DatedFileWithFmt <root> <fmt>`                           *DatedFileWithFmt*
-Creates a new markdown file using `strftime` format `<fmt>.md`
+`:DatedFileWithFmt <root> <fmt>`                          *DatedFileWithFmt*
+Creates a new markdown file using `strftime` format `<fmt>.md`. If the file
+does not exist, it will be created. The cursor will be placed on the last
+line.
 
 
-Both commands, when called, will:
+`DFJournal <topic>`                                              *DFJournal*
+Create a H2 header in the journal matching `g:datedfile_default_format`, in
+`g:datedfile_journal_dir`. Will fail if `g:datedfile_journal_dir` does not
+exist.
 
-- Create the file, if it doesn't exist, and add a markdown atx-style header
-- Place cursor on the last line
+
+`DFLogbook <topic>`                                              *DFLogbook*
+Create a H2 header in the logbook matching `g:datedfile_default_format`, in
+`g:datedfile_logbook_dir`. Will fail if `g:datedfile_logbook_dir` does not
+exist.
+
+
+`DFRecentJournals <n_days>`                               *DFRecentJournals*
+Show `n` days of journals from `g:datedfile_journal_dir`.
+
+*DFRecentJournalsQF*
+`DFRecentJournalsQF <n_days>`                           
+Show `n` days of journals from `g:datedfile_journal_dir`, in the quickfix
+menu.
+
+                                                        *DFRecentJournalsH2*
+`DFRecentJournalsH2 <n_days>`                           
+Show `n` days of H2 headers from journals in `g:datedfile_journal_dir`, in the quickfix
+menu.
+
+                                                            *JournalFromURL*
+`JournalFromURL`                                            
+Create a H2 header using the contents of the clipboard. Works as if the
+clipboard contents are a markdown link. The url text will be the H2 title, and
+the actual URL will be inserted as a standalone text line.
 
 ------------------------------------------------------------------------
 
-SECTION 2. CONFIGURATION                         *DatedFilesConfiguration*
+SECTION 2. CONFIGURATION                        *DatedFiles-Configuration*
 
-`g:datedfile_default_format` [default: '%Y%m%d-%A']
-`strftime` format to use in the filename (will have `.md` appended)
+                                               *g:datedfile_default_format*
+g:datedfile_default_format~
+    [default: '%Y-%m-%d-%A']
+    `strftime` format to use in the filename (will have `.md` appended)
 
-`g:datedfile_default_header_format`
-`strftime` format to use in the header (will have `# ` prepended)
+
+                                        *g:datedfile_default_header_format*
+g:datedfile_default_header_format~
+    [default: '%Y-%m-%d %A']
+    `strftime` format to use in the header (will have `# ` prepended)
+
+
+                                                 *g:datedfile_journal_dir*
+g:datedfile_journal_dir~
+    string representing a parent directory for the `DFJournal` command
+
+
+                                                   *datedfile_logbook_dir*
+g:datedfile_logbook_dir~
+    string representing a parent directory for the `DFLogbook` command
+
+
+                                            *datedfile_lowercase_filename*
+g:datedfile_lowercase_filename~
+    [default: 1]
+    `bool` representing whether to lowercase the filename
+
 
 ------------------------------------------------------------------------
 
-SECTION 3. EXAMPLES                                   *DatedFilesExamples*
-
-Logbook, like `~/notes/logbook/20200101-Friday.md`
+SECTION 3. EXAMPLES                                  *DatedFiles-Examples*
 
 `:DatedFile ~/notes/logbook`
-
-
-Calendar, like `~/notes/calendar/2020-01 January.md`
+...to create a logbook, like `~/notes/logbook/20200101-Friday.md`
 
 `:DatedFileWithFmt ~/notes/calendar %Y-%m %B`
+...to create a calendar entry, like `~/notes/calendar/2020-01 January.md`
 
 ========================================================================
 

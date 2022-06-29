@@ -19,6 +19,56 @@ function! s:titlecase(sentence) abort "{{{
     return join(l:titled, ' ')
 endfunction "}}}
 
+function! s:open_journal(filename) abort "{{{
+    exec "edit " . g:journal_dir . "/" . a:filename
+endfunction "}}}
+
+function! s:n_logbooks_quickfix(n) abort " {{{
+    let n=a:n
+    if strlen(a:n) == 0
+        let l:n=10
+    endif
+    let last7=<sid>last_n_logbooks(l:n)
+    let last7_as_qf=map(last7, {key, val -> {
+                \ 'filename': v:val, 
+                \ 'lnum': 3, 'col': 1, 
+                \ 'text': readfile(v:val)[0][2:]}})
+    call setqflist(last7_as_qf)
+    copen
+    cfirst
+endfunction " }}}
+
+function! vim_datedfiles#n_days_journals_fzf(n) abort " {{{
+    let files = vim_datedfiles#find#n_days_journals(a:n)
+    if len(files) == 0
+        echom "Run :Journal to create a journal today"
+        return
+    endif
+    let jrnl=g:journal_dir . "/"
+    call map(l:files, { _, v -> substitute(l:v, l:jrnl, "", "")})
+    call fzf#run(fzf#wrap({'source': l:files, 'sink': funcref("<sid>open_journal")}))
+endfunction " }}}
+
+function! vim_datedfiles#n_days_journals_quickfix(n) abort " {{{
+    let n = 7
+    if len(a:n) != 0
+        let n = a:n
+    endif
+    let files_as_qflist=map(vim_datedfiles#find#n_days_journals(l:n), {key, val -> {'filename': fnamemodify(v:val, ":t"), 'lnum': 1, 'col': 1}})
+    call setqflist(l:files_as_qflist[1:a:n])
+endfunction " }}}
+
+function! vim_datedfiles#n_days_journals_quickfix_h2(n) abort " {{{
+    let n = 7
+    if len(a:n) != 0
+        let n = a:n
+    endif
+    let journals=vim_datedfiles#find#n_days_journals(l:n)
+    call reverse(l:journals)
+    exec "silent grep \'^\\#\\#\' " . join(l:journals, " ")
+    copen
+endfunction " }}}
+
 function! vim_datedfiles#new_with_fmt(root, fmt, ...) abort "{{{
     let filename=s:filename(a:root, a:fmt, '')
     if filereadable(l:filename)

@@ -1,0 +1,61 @@
+" Capture a journal entry as a h2 header
+" keeping all entries for a day under a single file
+function! vim_datedfiles#capture#new_single_day_journal(topic) abort " {{{
+    if !exists("g:datedfile_journal_dir")
+        echom "Need to set g:datedfile_journal_dir"
+        return -1
+    endif
+    let root=g:datedfile_journal_dir
+    call vim_datedfiles#new_or_jump_with_fmt(l:root, "%Y-%m-%d")
+    if len(a:topic) != 0
+        call append(line('$'), ['', '## ' . a:topic, ''])
+        norm G
+    else
+        norm gg
+    endif
+endfunction " }}}
+
+" Capture a journal entry as a h1 header in a new dated file
+function! vim_datedfiles#capture#new_journal(topic) abort " {{{
+    let headerfmt=g:datedfile_default_header_format
+    let g:datedfile_default_header_format="%Y-%m-%d ::"
+    if len(a:topic) != 0
+        let topic=a:topic
+    else
+        let topic=input("TOPIC: ")
+    endif
+    if !exists("g:datedfile_journal_dir")
+        echom "Need to set g:datedfile_journal_dir"
+        return -1
+    endif
+    let root=g:datedfile_journal_dir
+    let succeeded=vim_datedfiles#new_with_fmt_and_name(l:root, "%Y-%m-%d-", l:topic)
+    call append(1, ["", "@journal"])
+    let g:datedfile_default_header_format=l:headerfmt
+    norm Go
+    startinsert
+endfunction " }}}
+
+function! vim_datedfiles#capture#new_logbook(topic) " {{{
+    if !exists("g:datedfile_logbook_dir")
+        echom "Need to set g:datedfile_journal_dir"
+        return -1
+    endif
+    call vim_datedfiles#new_or_jump(simplify(g:datedfile_logbook_dir))
+    if len(a:topic) != 0
+        call append(line('$'), ["", "## " . text#titlecase(a:topic), ""])
+        norm Go
+        startinsert
+    end
+endfunction " }}}
+
+function! vim_datedfiles#capture#journal_for_url() abort "{{{
+    let url=getreg('*')
+    let title=substitute(l:url, "^\[", "", "")
+    let title=substitute(title, "\].*", "", "")
+    call vim_datedfiles#capture#new_single_day_journal(l:title)
+    call append(line('.'), ["Source: " . getreg('*'), '', '- '])
+    norm G$zO
+    startinsert
+endfunction "}}}
+
