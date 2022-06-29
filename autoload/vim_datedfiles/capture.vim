@@ -1,3 +1,10 @@
+function! s:titlecase(str) abort "{{{
+    let words=split(a:str, '\W\+')
+    let titled=map(l:words, {_, word -> toupper(word[0]) . word[1:]})
+    return join(l:titled, ' ')
+endfunction "}}}
+
+
 " Capture a journal entry as a h2 header
 " keeping all entries for a day under a single file
 function! vim_datedfiles#capture#new_single_day_journal(topic) abort " {{{
@@ -43,7 +50,7 @@ function! vim_datedfiles#capture#new_logbook(topic) " {{{
     endif
     call vim_datedfiles#new_or_jump(simplify(g:datedfile_logbook_dir))
     if len(a:topic) != 0
-        call append(line('$'), ["", "## " . text#titlecase(a:topic), ""])
+        call append(line('$'), ["", "## " . s:titlecase(a:topic), ""])
         norm Go
         startinsert
     end
@@ -54,7 +61,7 @@ function! vim_datedfiles#capture#journal_for_url() abort "{{{
     let title=substitute(l:url, "^\[", "", "")
     let title=substitute(title, "\].*", "", "")
     call vim_datedfiles#capture#new_single_day_journal(l:title)
-    call append(line('.'), ["Source: " . getreg('*'), '', '- '])
+    call append(line('.'), ["Source: " . l:url, '', '- '])
     norm G$zO
     startinsert
 endfunction "}}}
