@@ -11,6 +11,16 @@ if !exists("g:datedfile_default_header_format")
     let g:datedfile_default_header_format="%Y-%m-%d %A"
 endif
 
+
+if !exists("g:datedfile_lowercase_filename")
+    let g:datedfile_lowercase_filename=0
+endif
+
+if !exists("g:datedfile_lowercase_time")
+    let g:datedfile_lowercase_time=0
+endif
+
+
 command! -nargs=1 DatedFile call vim_datedfiles#new_or_jump(<f-args>)
 command! -nargs=+ DatedFileWithFmt call vim_datedfiles#new_or_jump_with_fmt(<f-args>)
 

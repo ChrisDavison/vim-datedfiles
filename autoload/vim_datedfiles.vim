@@ -1,13 +1,17 @@
 function! s:filename(root, fmt, name) abort "{{{
     let time=strftime(printf("%s", a:fmt))
-        let name=""
+    if g:datedfile_lowercase_time
+        let time=tolower(l:time)
+    endif
+
+    let name=""
     if a:name != ""
         let name="-" . substitute(a:name, " ", "-", "g")
     endif
-    let filename=l:time . l:name . ".md"
     if g:datedfile_lowercase_filename
-        let filename=tolower(l:filename)
+        let name=tolower(l:name)
     endif
+    let filename=l:time . l:name . ".md"
 
     let filepath=expand(a:root . "/" . l:filename)
     return substitute(l:filepath, "//", "/", "g")
