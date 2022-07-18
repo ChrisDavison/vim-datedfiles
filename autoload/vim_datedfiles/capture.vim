@@ -60,6 +60,18 @@ function! vim_datedfiles#capture#journal_for_url() abort "{{{
     let url=getreg('*')
     let title=substitute(l:url, "^\[", "", "")
     let title=substitute(title, "\].*", "", "")
+    call vim_datedfiles#capture#new_journal(l:title)
+    call append(line('.'), ["Source: " . l:url, '', '- '])
+    norm G$zO
+    startinsert
+endfunction "}}}
+
+
+
+function! vim_datedfiles#capture#journal_header_for_url() abort "{{{
+    let url=getreg('*')
+    let title=substitute(l:url, "^\[", "", "")
+    let title=substitute(title, "\].*", "", "")
     call vim_datedfiles#capture#new_single_day_journal(l:title)
     call append(line('.'), ["Source: " . l:url, '', '- '])
     norm G$zO
