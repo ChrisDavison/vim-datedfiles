@@ -52,6 +52,24 @@ function! vim_datedfiles#capture#new_logbook(topic) " {{{
         echom "Need to set g:datedfile_journal_dir"
         return -1
     endif
+    if len(a:topic) != 0
+        let topic=a:topic
+    else
+        let topic=input("TOPIC: ")
+    endif
+
+    let succeeded=vim_datedfiles#new_with_fmt_and_name(simplify(g:datedfile_logbook_dir), g:datedfile_default_format, a:topic)
+    call append(line('$'), [""])
+    norm Go
+    startinsert
+endfunction " }}}
+
+
+function! vim_datedfiles#capture#new_single_day_logbook(topic) " {{{
+    if !exists("g:datedfile_logbook_dir")
+        echom "Need to set g:datedfile_journal_dir"
+        return -1
+    endif
     call vim_datedfiles#new_or_jump(simplify(g:datedfile_logbook_dir))
     if len(a:topic) != 0
         call append(line('$'), ["", "## " . s:titlecase(a:topic), ""])
