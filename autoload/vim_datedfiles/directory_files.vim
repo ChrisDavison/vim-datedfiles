@@ -20,6 +20,20 @@ function! vim_datedfiles#directory_files#last_n_qf(dir, n) abort "{{{
     cw
 endfunction "}}}
 
+function! s:relative_date(delta) " {{{
+    let fmt='+"' . g:datedfile_default_format . '"'"
+    return trim(system("date -d '" . a:delta . "days' " . l:fmt))
+endfunction " }}}
+
+function! s:last_n_days(n) abort " {{{
+    let dates=[]
+    for delta in range(-a:n+1, 0)
+        call add(l:dates, s:relative_date(l:delta))
+    endfor
+    return l:dates
+endfunction " }}}
+
+
 function! vim_datedfiles#directory_files#last_dated_n(n, dir) abort "{{{
     let folder=expand(a:dir)
     if !isdirectory(l:folder)
@@ -27,7 +41,7 @@ function! vim_datedfiles#directory_files#last_dated_n(n, dir) abort "{{{
         return
     endif
     let files=split(glob(l:folder . "/*.md"), "\n")
-    let dates=funcs#last_n_days(a:n)
+    let dates=s:last_n_days(a:n)
     if len(dates) == 0
         return []
     end

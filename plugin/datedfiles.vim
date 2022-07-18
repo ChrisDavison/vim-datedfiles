@@ -24,7 +24,7 @@ endif
 command! -nargs=1 DatedFile call vim_datedfiles#new_or_jump(<f-args>)
 command! -nargs=+ DatedFileWithFmt call vim_datedfiles#new_or_jump_with_fmt(<f-args>)
 
-command! -nargs=? Journal call vim_datedfiles#capture#new_journal(<q-args>)
+command! -nargs=? Journal call vim_datedfiles#capture#new_journal(<q-args>, "")
 command! -nargs=? JournalHeader call vim_datedfiles#capture#new_single_day_journal(<q-args>)
 command! -nargs=? Logbook call vim_datedfiles#capture#new_logbook(<q-args>)
 

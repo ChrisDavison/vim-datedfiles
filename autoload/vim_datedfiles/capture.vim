@@ -23,7 +23,7 @@ function! vim_datedfiles#capture#new_single_day_journal(topic) abort " {{{
 endfunction " }}}
 
 " Capture a journal entry as a h1 header in a new dated file
-function! vim_datedfiles#capture#new_journal(topic) abort " {{{
+function! vim_datedfiles#capture#new_journal(topic, tags) abort " {{{
     let headerfmt=g:datedfile_default_header_format
     let g:datedfile_default_header_format="%Y-%m-%d ::"
     if len(a:topic) != 0
@@ -37,7 +37,11 @@ function! vim_datedfiles#capture#new_journal(topic) abort " {{{
     endif
     let root=g:datedfile_journal_dir
     let succeeded=vim_datedfiles#new_with_fmt_and_name(l:root, g:datedfile_default_format, l:topic)
-    call append(1, ["", "@journal"])
+    let tags="@journal"
+    if len(a:tags) != 0
+        let tags.=" " . a:tags
+    endif
+    call append(1, ["", l:tags])
     let g:datedfile_default_header_format=l:headerfmt
     norm Go
     startinsert
@@ -60,7 +64,7 @@ function! vim_datedfiles#capture#journal_for_url() abort "{{{
     let url=getreg('*')
     let title=substitute(l:url, "^\[", "", "")
     let title=substitute(title, "\].*", "", "")
-    call vim_datedfiles#capture#new_journal(l:title)
+    call vim_datedfiles#capture#new_journal(l:title, "@article")
     call append(line('.'), ["Source: " . l:url, '', '- '])
     norm G$zO
     startinsert
