@@ -36,7 +36,7 @@ function! vim_datedfiles#capture#new_journal(topic) abort " {{{
         return -1
     endif
     let root=g:datedfile_journal_dir
-    let succeeded=vim_datedfiles#new_with_fmt_and_name(l:root, "%Y-%m-%d-", l:topic)
+    let succeeded=vim_datedfiles#new_with_fmt_and_name(l:root, g:datedfile_default_format, l:topic)
     call append(1, ["", "@journal"])
     let g:datedfile_default_header_format=l:headerfmt
     norm Go
