@@ -12,6 +12,7 @@ function! s:filename(root, fmt, name) abort "{{{
         let name=tolower(l:name)
     endif
     let filename=l:time . l:name . ".md"
+    echom l:filename
 
     let filepath=expand(a:root . "/" . l:filename)
     return substitute(l:filepath, "//", "/", "g")
@@ -96,9 +97,7 @@ function! vim_datedfiles#new_with_fmt_and_name(root, fmt, name) abort "{{{
         if !isdirectory(l:folder)
             call mkdir(l:folder, "p")
         endif
-        echom l:filename
         exec "edit " . l:filename
-        echom a:name
         let header="# " . strftime(g:datedfile_default_header_format) . " " . <sid>titlecase(a:name)
         call append(0, l:header)
     endif

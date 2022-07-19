@@ -48,6 +48,9 @@ function! vim_datedfiles#capture#new_journal(topic, tags) abort " {{{
 endfunction " }}}
 
 function! vim_datedfiles#capture#new_logbook(topic) " {{{
+    let headerfmt=g:datedfile_default_header_format
+    let g:datedfile_default_header_format="%Y-%m-%d ::"
+
     if !exists("g:datedfile_logbook_dir")
         echom "Need to set g:datedfile_journal_dir"
         return -1
@@ -58,7 +61,8 @@ function! vim_datedfiles#capture#new_logbook(topic) " {{{
         let topic=input("TOPIC: ")
     endif
 
-    let succeeded=vim_datedfiles#new_with_fmt_and_name(simplify(g:datedfile_logbook_dir), g:datedfile_default_format, a:topic)
+    let succeeded=vim_datedfiles#new_with_fmt_and_name(simplify(g:datedfile_logbook_dir), g:datedfile_default_format, l:topic)
+    let g:datedfile_default_header_format=l:headerfmt
     call append(line('$'), [""])
     norm Go
     startinsert
