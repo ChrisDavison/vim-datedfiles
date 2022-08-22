@@ -35,13 +35,23 @@ function! s:n_logbooks_quickfix(n) abort " {{{
     endif
     let last7=<sid>last_n_logbooks(l:n)
     let last7_as_qf=map(last7, {key, val -> {
-                \ 'filename': v:val, 
-                \ 'lnum': 3, 'col': 1, 
+                \ 'filename': v:val,
+                \ 'lnum': 3, 'col': 1,
                 \ 'text': readfile(v:val)[0][2:]}})
     call setqflist(last7_as_qf)
     copen
     cfirst
 endfunction " }}}
+
+function! vim_datedfiles#n_days_logbooks_fzf(n) abort " {{{
+    let files = vim_datedfiles#find#n_days_logbooks(a:n)
+    if len(files) == 0
+        echom "Run :Logbook to create a journal today"
+        return
+    endif
+    call fzf#run(fzf#wrap({'source': l:files}))
+endfunction " }}}
+
 
 function! vim_datedfiles#n_days_journals_fzf(n) abort " {{{
     let files = vim_datedfiles#find#n_days_journals(a:n)

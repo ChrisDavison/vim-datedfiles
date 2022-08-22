@@ -77,9 +77,12 @@ function! vim_datedfiles#capture#new_single_day_logbook(topic) " {{{
     call vim_datedfiles#new_or_jump(simplify(g:datedfile_logbook_dir))
     if len(a:topic) != 0
         call append(line('$'), ["", "## " . s:titlecase(a:topic), ""])
-        norm Go
-        startinsert
+    else
+        let topic=input("TOPIC: ")
+        call append(line('$'), ["", "## " . s:titlecase(l:topic), ""])
     end
+    norm Go
+    startinsert
 endfunction " }}}
 
 function! vim_datedfiles#capture#journal_for_url() abort "{{{
