@@ -28,7 +28,9 @@ endfunction " }}}
 function! s:last_n_days(n) abort " {{{
     let dates=[]
     for delta in range(-a:n+1, 0)
-        call add(l:dates, s:relative_date(l:delta))
+        let rel=s:relative_date(l:delta)
+        let rel=substitute(l:rel, 'T.*', '', '')
+        call add(l:dates, l:rel)
     endfor
     return l:dates
 endfunction " }}}

@@ -6,14 +6,15 @@ function! s:filename(root, fmt, name) abort "{{{
 
     let name=""
     if a:name != ""
-        let name="-" . substitute(a:name, " ", "-", "g")
+        let tidy=substitute(a:name, '[^a-zA-Z0-9_\-. ]', '', 'g')
+        let tidy=substitute(l:tidy, " ", "-", "g")
+        let tidy=substitute(l:tidy, '---\+', "--", "g")
+        let name="-" . l:tidy
     endif
     if g:datedfile_lowercase_filename
         let name=tolower(l:name)
     endif
     let filename=l:time . l:name . ".md"
-    echom l:filename
-
     let filepath=expand(a:root . "/" . l:filename)
     return substitute(l:filepath, "//", "/", "g")
 endfunction "}}}
@@ -69,8 +70,8 @@ function! vim_datedfiles#n_days_journals_quickfix(n) abort " {{{
     if len(a:n) != 0
         let n = a:n
     endif
-    let files_as_qflist=map(vim_datedfiles#find#n_days_journals(l:n), {key, val -> {'filename': fnamemodify(v:val, ":t"), 'lnum': 1, 'col': 1}})
-    call setqflist(l:files_as_qflist[1:a:n])
+    let files_as_qflist=map(vim_datedfiles#find#n_days_journals(l:n), {key, val -> {'filename': v:val, 'lnum': 1, 'col': 1}})
+    call setqflist(l:files_as_qflist)
 endfunction " }}}
 
 function! vim_datedfiles#n_days_journals_quickfix_h2(n) abort " {{{
