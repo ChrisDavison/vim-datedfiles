@@ -107,3 +107,50 @@ function! vim_datedfiles#capture#journal_header_for_url() abort "{{{
     startinsert
 endfunction "}}}
 
+function! s:get_header_line(topic) abort "{{{
+    let l:topic=a:topic
+    if len(l:topic) == 0
+        let l:topic=input("TOPIC: ")
+    endif
+    if exists('g:datedfile_header_format')
+        let datestr=strftime(g:datedfile_header_format)
+    else
+        let datestr=strftime(g:datedfile_default_header_format)
+    endif
+    let header=printf("%s - %s", datestr, s:titlecase(l:topic))
+    return l:header
+endfunction "}}}
+
+function! vim_datedfiles#capture#entry_within_heading(filename, heading, topic) abort "{{{
+    " Assume a heading like '## Logbook'
+    " find that as START,
+    " then search forward for a sibling '^## ' as END
+    " then insert entry as child of HEADING, just before END
+    exec "edit " . a:filename
+    let header_level=strlen(split(a:heading, " ")[0])
+    let markers = repeat("#", l:header_level + 1)
+    let header=l:markers . " " . <sid>get_header_line(a:topic)
+    call cursor(1, 1)
+    let logbook_start=search(a:heading)
+    call cursor(l:logbook_start + 1, 1) "Move cursor PAST logbook heading
+    " Find a header at same level as heading
+    let next_sibling=search("^" . repeat("#", l:header_level) . " ", "nW", line("$"))
+    if l:next_sibling < l:logbook_start
+        call append(line("$"), ["", l:header, ""])
+    else
+        call append(l:next_sibling-1, ["", l:header, ""])
+    endif
+    norm zOGo
+    startinsert
+endfunction "}}}
+
+function! vim_datedfiles#capture#entry_at_end_of_file(filename, topic) abort "{{{
+    " Assume that heading h1 is '# logbook' or '# YEAR'
+    " jump to end of file
+    " and create a h2 with datedfile header fmt
+    exec "edit " . a:filename
+    let header="## " . <sid>get_header_line(a:topic)
+    call append(line('$'), ["", l:header, ""])
+    norm zOGo
+    startinsert
+endfunction "}}}
