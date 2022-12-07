@@ -24,8 +24,6 @@ endfunction " }}}
 
 " Capture a journal entry as a h1 header in a new dated file
 function! vim_datedfiles#capture#new_journal(topic, tags) abort " {{{
-    let headerfmt=g:datedfile_default_header_format
-    let g:datedfile_default_header_format="%Y-%m-%d ::"
     if len(a:topic) != 0
         let topic=a:topic
     else
@@ -36,21 +34,17 @@ function! vim_datedfiles#capture#new_journal(topic, tags) abort " {{{
         return -1
     endif
     let root=g:datedfile_journal_dir
-    let succeeded=vim_datedfiles#new_with_fmt_and_name(l:root, g:datedfile_default_format, l:topic)
+    let succeeded=vim_datedfiles#new_with_fmt_and_name(l:root, g:datedfile_filename_format, l:topic)
     let tags="@journal"
     if len(a:tags) != 0
         let tags.=" " . a:tags
     endif
     call append(1, ["", l:tags])
-    let g:datedfile_default_header_format=l:headerfmt
     norm Go
     startinsert
 endfunction " }}}
 
 function! vim_datedfiles#capture#new_logbook(topic) " {{{
-    let headerfmt=g:datedfile_default_header_format
-    let g:datedfile_default_header_format="%Y-%m-%d ::"
-
     if !exists("g:datedfile_logbook_dir")
         echom "Need to set g:datedfile_journal_dir"
         return -1
@@ -61,8 +55,7 @@ function! vim_datedfiles#capture#new_logbook(topic) " {{{
         let topic=input("TOPIC: ")
     endif
 
-    let succeeded=vim_datedfiles#new_with_fmt_and_name(simplify(g:datedfile_logbook_dir), g:datedfile_default_format, l:topic)
-    let g:datedfile_default_header_format=l:headerfmt
+    let succeeded=vim_datedfiles#new_with_fmt_and_name(simplify(g:datedfile_logbook_dir), g:datedfile_filename_format, l:topic)
     call append(line('$'), [""])
     norm Go
     startinsert
@@ -115,7 +108,7 @@ function! s:get_header_line(topic) abort "{{{
     if exists('g:datedfile_header_format')
         let datestr=strftime(g:datedfile_header_format)
     else
-        let datestr=strftime(g:datedfile_default_header_format)
+        let datestr=strftime(g:datedfile_header_format)
     endif
     let header=printf("%s - %s", datestr, s:titlecase(l:topic))
     return l:header

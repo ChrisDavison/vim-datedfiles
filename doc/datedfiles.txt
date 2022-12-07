@@ -29,13 +29,13 @@ line.
 
 
 `DFJournal <topic>`                                              *DFJournal*
-Create a H2 header in the journal matching `g:datedfile_default_format`, in
+Create a H2 header in the journal matching `g:datedfile_filename_format`, in
 `g:datedfile_journal_dir`. Will fail if `g:datedfile_journal_dir` does not
 exist.
 
 
 `DFLogbook <topic>`                                              *DFLogbook*
-Create a H2 header in the logbook matching `g:datedfile_default_format`, in
+Create a H2 header in the logbook matching `g:datedfile_filename_format`, in
 `g:datedfile_logbook_dir`. Will fail if `g:datedfile_logbook_dir` does not
 exist.
 
@@ -63,14 +63,14 @@ the actual URL will be inserted as a standalone text line.
 
 SECTION 2. CONFIGURATION                        *DatedFiles-Configuration*
 
-                                               *g:datedfile_default_format*
-g:datedfile_default_format~
+                                               *g:datedfile_filename_format*
+g:datedfile_filename_format~
     [default: '%Y-%m-%d-%A']
     `strftime` format to use in the filename (will have `.md` appended)
 
 
-                                        *g:datedfile_default_header_format*
-g:datedfile_default_header_format~
+                                        *g:datedfile_header_format*
+g:datedfile_header_format~
     [default: '%Y-%m-%d %A']
     `strftime` format to use in the header (will have `# ` prepended)
 

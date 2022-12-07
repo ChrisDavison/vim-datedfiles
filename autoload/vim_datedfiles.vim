@@ -26,7 +26,7 @@ function! s:titlecase(sentence) abort "{{{
 endfunction "}}}
 
 function! s:open_journal(filename) abort "{{{
-    exec "edit " . g:journal_dir . "/" . a:filename
+    exec "edit " . g:datedfile_journal_dir . "/" . a:filename
 endfunction "}}}
 
 function! s:n_logbooks_quickfix(n) abort " {{{
@@ -60,7 +60,7 @@ function! vim_datedfiles#n_days_journals_fzf(n) abort " {{{
         echom "Run :Journal to create a journal today"
         return
     endif
-    let jrnl=g:journal_dir . "/"
+    let jrnl=g:datedfile_journal_dir . "/"
     call map(l:files, { _, v -> substitute(l:v, l:jrnl, "", "")})
     call fzf#run(fzf#wrap({'source': l:files, 'sink': funcref("<sid>open_journal")}))
 endfunction " }}}
@@ -109,7 +109,7 @@ function! vim_datedfiles#new_with_fmt_and_name(root, fmt, name) abort "{{{
             call mkdir(l:folder, "p")
         endif
         exec "edit " . l:filename
-        let header="# " . strftime(g:datedfile_default_header_format) . " " . <sid>titlecase(a:name)
+        let header="# " . strftime(g:datedfile_header_format) . " " . <sid>titlecase(a:name)
         call append(0, l:header)
     endif
 
@@ -119,7 +119,7 @@ endfunction "}}}
 
 function! vim_datedfiles#new_or_jump(root) abort "{{{
     let root=printf("%s", a:root)
-    call vim_datedfiles#new_with_fmt(l:root, g:datedfile_default_format)
+    call vim_datedfiles#new_with_fmt(l:root, g:datedfile_filename_format)
 endfunction "}}}
 
 function! vim_datedfiles#new_or_jump_with_fmt(root, ...) abort "{{{

@@ -21,7 +21,7 @@ function! vim_datedfiles#directory_files#last_n_qf(dir, n) abort "{{{
 endfunction "}}}
 
 function! s:relative_date(delta) " {{{
-    let fmt='+"' . substitute(g:datedfile_default_format, "T.*", "", "") . '"'"
+    let fmt='+"' . substitute(g:datedfile_filename_format, "T.*", "", "") . '"'"
     return trim(system("date -d '" . a:delta . "days' " . l:fmt))
 endfunction " }}}
 
