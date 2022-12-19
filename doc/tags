@@ -13,6 +13,6 @@ JournalFromURL	datedfiles.txt	/*JournalFromURL*
 datedfile_logbook_dir	datedfiles.txt	/*datedfile_logbook_dir*
 datedfile_lowercase_filename	datedfiles.txt	/*datedfile_lowercase_filename*
 datedfiles.txt	datedfiles.txt	/*datedfiles.txt*
-g:datedfile_default_format	datedfiles.txt	/*g:datedfile_default_format*
-g:datedfile_default_header_format	datedfiles.txt	/*g:datedfile_default_header_format*
+g:datedfile_filename_format	datedfiles.txt	/*g:datedfile_filename_format*
+g:datedfile_header_format	datedfiles.txt	/*g:datedfile_header_format*
 g:datedfile_journal_dir	datedfiles.txt	/*g:datedfile_journal_dir*

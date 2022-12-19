@@ -35,7 +35,6 @@ function! s:last_n_days(n) abort " {{{
     return l:dates
 endfunction " }}}
 
-
 function! vim_datedfiles#directory_files#last_dated_n(n, dir) abort "{{{
     let folder=expand(a:dir)
     if !isdirectory(l:folder)

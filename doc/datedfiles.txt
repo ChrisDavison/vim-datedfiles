@@ -44,17 +44,17 @@ exist.
 Show `n` days of journals from `g:datedfile_journal_dir`.
 
 *DFRecentJournalsQF*
-`DFRecentJournalsQF <n_days>`                           
+`DFRecentJournalsQF <n_days>`
 Show `n` days of journals from `g:datedfile_journal_dir`, in the quickfix
 menu.
 
                                                         *DFRecentJournalsH2*
-`DFRecentJournalsH2 <n_days>`                           
+`DFRecentJournalsH2 <n_days>`
 Show `n` days of H2 headers from journals in `g:datedfile_journal_dir`, in the quickfix
 menu.
 
                                                             *JournalFromURL*
-`JournalFromURL`                                            
+`JournalFromURL`
 Create a H2 header using the contents of the clipboard. Works as if the
 clipboard contents are a markdown link. The url text will be the H2 title, and
 the actual URL will be inserted as a standalone text line.

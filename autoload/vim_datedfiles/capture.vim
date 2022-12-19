@@ -84,7 +84,7 @@ function! vim_datedfiles#capture#journal_for_url() abort "{{{
     let title=substitute(title, '|', "-", "")
     call vim_datedfiles#capture#new_journal(l:title, "@article")
     call append(line('.'), ["Source: " . l:url, '', '- '])
-    norm G$zO
+    norm G$
     startinsert
 endfunction "}}}
 

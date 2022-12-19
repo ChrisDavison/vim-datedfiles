@@ -53,7 +53,6 @@ function! vim_datedfiles#n_days_logbooks_fzf(n) abort " {{{
     call fzf#run(fzf#wrap({'source': l:files}))
 endfunction " }}}
 
-
 function! vim_datedfiles#n_days_journals_fzf(n) abort " {{{
     let files = vim_datedfiles#find#n_days_journals(a:n)
     if len(files) == 0
