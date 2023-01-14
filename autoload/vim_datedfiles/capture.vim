@@ -56,7 +56,7 @@ function! vim_datedfiles#capture#new_logbook(topic) " {{{
     endif
 
     let succeeded=vim_datedfiles#new_with_fmt_and_name(simplify(g:datedfile_logbook_dir), g:datedfile_filename_format, l:topic)
-    call append(line('$'), [""])
+    call append(line('$'), ["@logbook", ""])
     norm Go
     startinsert
 endfunction " }}}
