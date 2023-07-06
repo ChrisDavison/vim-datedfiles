@@ -7,9 +7,9 @@ function! s:n_days_from_folder(n, folder) abort "{{{
 endfunction "}}}
 
 function! vim_datedfiles#find#n_days_logbooks(n) abort " {{{
-    return <sid>n_days_from_folder(a:n, g:datedfile_logbook_dir)
+    return <sid>n_days_from_folder(a:n, g:datedfile.logbook.dir)
 endfunction " }}}
 
 function! vim_datedfiles#find#n_days_journals(n) abort " {{{
-    return <sid>n_days_from_folder(a:n, g:datedfile_journal_dir)
+    return <sid>n_days_from_folder(a:n, g:datedfile.journal.dir)
 endfunction " }}}

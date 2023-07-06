@@ -21,6 +21,7 @@ function! vim_datedfiles#directory_files#last_n_qf(dir, n) abort "{{{
 endfunction "}}}
 
 function! s:relative_date(delta) " {{{
+    " TODO need to fix this to use the relevant filename format
     let fmt='+"' . substitute(g:datedfile_filename_format, "T.*", "", "") . '"'"
     return trim(system("date -d '" . a:delta . "days' " . l:fmt))
 endfunction " }}}
@@ -41,13 +42,17 @@ function! vim_datedfiles#directory_files#last_dated_n(n, dir) abort "{{{
         echom "Not a folder..." . l:folder
         return
     endif
-    let files=split(glob(l:folder . "/*.md"), "\n")
-    let dates=s:last_n_days(a:n)
-    if len(dates) == 0
-        return []
-    end
-    let pattern=join(l:dates, "\\|")
-    let files=filter(l:files, {_, val -> match(val, l:pattern) >= 0})
-    return reverse(l:files)
+    if g:datedfile.find_method == "native"
+        let files=split(glob(l:folder . "/*.md"), "\n")
+        let dates=s:last_n_days(a:n)
+        if len(dates) == 0
+            return []
+        end
+        let pattern=join(l:dates, "\\|")
+        let files=filter(l:files, {_, val -> match(val, l:pattern) >= 0})
+        return reverse(l:files)
+    else
+        return reverse(systemlist("fd . -e md --changed-within " . a:n . "d " . a:dir))
+    endif
 endfunction "}}}
 
