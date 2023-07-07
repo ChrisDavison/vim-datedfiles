@@ -24,18 +24,18 @@ if !exists("g:datedfile")
 endif
 
 " Journal stuff
-command! -nargs=? Journal call vim_datedfiles#capture#new_file(g:datedfile.journal, <q-args>) 
-command! -nargs=? JournalHeader call vim_datedfiles#capture#new_header(g:datedfile.journal, <q-args>)
+command! -nargs=? Journal call vim_datedfiles#new_file(g:datedfile.journal, <q-args>) 
+command! -nargs=? JournalHeader call vim_datedfiles#new_header(g:datedfile.journal, <q-args>)
 
 command! -nargs=1 RecentJournals call vim_datedfiles#n_days_journals_fzf(<q-args>)
 command! -nargs=? RecentJournalsQF call vim_datedfiles#n_days_journals_quickfix(<q-args>)
 command! -nargs=? RecentJournalsH2 call vim_datedfiles#n_days_journals_quickfix_h2(<q-args>)
 
-command! JournalFromURL call vim_datedfiles#capture#journal_for_url()
-command! JournalHeaderFromURL call vim_datedfiles#capture#journal_header_for_url()
+command! JournalFromURL call vim_datedfiles#journal_for_url()
+command! JournalHeaderFromURL call vim_datedfiles#journal_header_for_url()
 
 " Logbook stuff
-command! -nargs=? Logbook call vim_datedfiles#capture#new_file(g:datedfile.logbook, <q-args>) 
-command! -nargs=? LogbookHeader call vim_datedfiles#capture#new_header(g:datedfile.logbook, <q-args>)
+command! -nargs=? Logbook call vim_datedfiles#new_file(g:datedfile.logbook, <q-args>) 
+command! -nargs=? LogbookHeader call vim_datedfiles#new_header(g:datedfile.logbook, <q-args>)
 
 command! -nargs=1 RecentLogbooks call vim_datedfiles#n_days_logbooks_fzf(<q-args>)
