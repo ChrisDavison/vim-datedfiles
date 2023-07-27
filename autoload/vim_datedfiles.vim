@@ -1,8 +1,6 @@
-"  _   _ _____ ___ _     ___ _______   __
-" | | | |_   _|_ _| |   |_ _|_   _\ \ / /
-" | | | | | |  | || |    | |  | |  \ V / 
-" | |_| | | |  | || |___ | |  | |   | |  
-"  \___/  |_| |___|_____|___| |_|   |_|  
+" ============================================================
+" utility
+" ============================================================
 
 function! s:filename(root, fmt, name) abort "{{{
     let time=strftime(printf("%s", a:fmt))
@@ -15,9 +13,10 @@ function! s:filename(root, fmt, name) abort "{{{
         let l:name=substitute(l:name, '[^a-zA-Z0-9_\-. ]', '', 'g')
         let l:name=substitute(l:name, " ", "-", "g")
         let l:name=substitute(l:name, '---\+', "--", "g")
+        let l:name= "--" . l:name
     endif
 
-    let filename=l:time . "--" . l:name . ".md"
+    let filename=l:time . l:name . ".md"
     let filepath=expand(a:root . "/" . l:filename)
     return substitute(l:filepath, "//", "/", "g")
 endfunction "}}}
@@ -71,12 +70,9 @@ function! s:titlecase(sentence) abort "{{{
     return join(l:titled, ' ')
 endfunction "}}}
 
-" __     _____ _______        __
-" \ \   / /_ _| ____\ \      / /
-"  \ \ / / | ||  _|  \ \ /\ / / 
-"   \ V /  | || |___  \ V  V /  
-"    \_/  |___|_____|  \_/\_/   
-
+" ============================================================
+" view
+" ============================================================
 function! vim_datedfiles#n_days_logbooks(n) abort " {{{
     return <sid>n_days_from_folder(a:n, g:datedfile.logbook.dir)
 endfunction " }}}
@@ -91,7 +87,7 @@ function! vim_datedfiles#n_days_logbooks_fzf(n) abort " {{{
         echom "Run :Logbook to create a journal today"
         return
     endif
-    call fzf#wrap({'source': l:files}))
+    call fzf#run(fzf#wrap({'source': l:files}))
 endfunction " }}}
 
 function! vim_datedfiles#n_days_journals_fzf(n) abort " {{{
@@ -103,7 +99,7 @@ function! vim_datedfiles#n_days_journals_fzf(n) abort " {{{
     let jrnl=g:datedfile.journal.dir . "/"
     call map(l:files, { _, v -> substitute(l:v, l:jrnl, "", "")})
     " call fzf#wrap({'source': l:files, 'sink': funcref("<sid>open_journal")}))
-    call fzf#wrap({'source': l:files, 'sink': 'e'})
+    call fzf#run(fzf#wrap({'source': l:files, 'sink': 'e'}))
 endfunction " }}}
 
 function! vim_datedfiles#n_days_journals_quickfix(n) abort " {{{
@@ -126,11 +122,9 @@ function! vim_datedfiles#n_days_journals_quickfix_h2(n) abort " {{{
     copen
 endfunction " }}}
 
-"   ____    _    ____ _____ _   _ ____  _____ 
-"  / ___|  / \  |  _ \_   _| | | |  _ \| ____|
-" | |     / _ \ | |_) || | | | | | |_) |  _|  
-" | |___ / ___ \|  __/ | | | |_| |  _ <| |___ 
-"  \____/_/   \_\_|    |_|  \___/|_| \_\_____|
+" ============================================================
+" capture
+" ============================================================
 
 function! vim_datedfiles#new_or_jump(config, name) abort "{{{
     if !isdirectory(expand(a:config.dir))
@@ -189,7 +183,7 @@ function! vim_datedfiles#new_header(config, topic) abort "{{{
         echom "Failed to create file"
         return -1
     endif
-    call append(line('$'), ["", "#titlecase(l:topic), "", "", a:config.default_tags])
+    call append(line('$'), ["", "## " . s:titlecase(l:topic), "", a:config.default_tags, ""])
     norm Go
     startinsert
 endfunction "}}}
@@ -218,11 +212,9 @@ function! vim_datedfiles#journal_header_for_url() abort "{{{
     startinsert
 endfunction "}}}
 
-"  _____ ___ _   _ ____    _____ ___ _     _____ ____  
-" |  ___|_ _| \ | |  _ \  |  ___|_ _| |   | ____/ ___| 
-" | |_   | ||  \| | | | | | |_   | || |   |  _| \___ \ 
-" |  _|  | || |\  | |_| | |  _|  | || |___| |___ ___) |
-" |_|   |___|_| \_|____/  |_|   |___|_____|_____|____/ 
+" ============================================================
+" find files
+" ============================================================
 
 function! vim_datedfiles#last_n(dir, n) abort "{{{
     let fname=fnamemodify(a:dir, ":p") . "*"
